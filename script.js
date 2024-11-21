@@ -1,4 +1,8 @@
-// ABI for the contract
+let web3;
+let contract;
+let userAddress;
+
+// ABI вашего контракта
 const tokenABI = [
     {
         "inputs": [],
@@ -51,6 +55,38 @@ const tokenABI = [
     },
     {
         "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "getBalanceOf",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "image",
         "outputs": [
             {
@@ -62,59 +98,105 @@ const tokenABI = [
         "stateMutability": "view",
         "type": "function"
     },
-    // Add other functions as needed...
+    {
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transfer",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
 ];
 
-// The address of your token contract
-const tokenAddress = "0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b";
+// Адрес вашего контракта
+const contractAddress = "0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b";
 
-// Initialize Web3
-let web3;
-
-window.onload = () => {
+// Инициализация Web3 и подключения к MetaMask
+window.onload = async () => {
     if (typeof window.ethereum !== 'undefined') {
+        console.log("MetaMask найден");
         web3 = new Web3(window.ethereum);
-        console.log('MetaMask найден');
+        await window.ethereum.enable(); // запрос разрешения
+        userAddress = await web3.eth.getCoinbase();
+        console.log("Ваш адрес:", userAddress);
 
-        // Try to connect to MetaMask
-        document.getElementById("connectButton").addEventListener("click", async () => {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            displayBalance();
-        });
-    } else {
-        alert('MetaMask не установлен');
-    }
-};
+        contract = new web3.eth.Contract(tokenABI, contractAddress);
 
-// Function to display balance and token details
-async function displayBalance() {
-    const accounts = await web3.eth.getAccounts();
-    const account = accounts[0];
+        // Получение баланса токенов
+        const balance = await contract.methods.balanceOf(userAddress).call();
+        const decimals = await contract.methods.decimals().call();
+        const balanceInToken = balance / (10 ** decimals); // баланс в токенах
 
-    // Display wallet address
-    document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
-
-    // Get token contract instance
-    const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
-
-    try {
-        // Get balance of the wallet in tokens
-        const balance = await tokenContract.methods.balanceOf(account).call();
-        const decimals = await tokenContract.methods.decimals().call();
-        const tokenBalance = balance / (10 ** decimals);  // Convert to human-readable format
-
-        document.getElementById('balance').innerText = `Balance: ${tokenBalance} USDT`;
-
-        // Display token image
-        const tokenImage = await tokenContract.methods.image().call();
+        document.getElementById('balance').textContent = `Balance: ${balanceInToken} USDT`;
+        
+        // Получение картинки токена (например, если эта информация есть в вашем контракте)
+        const tokenImage = await contract.methods.image().call();
         document.getElementById('tokenImage').src = tokenImage;
 
-        // Simulate USD balance (since USDT is pegged to 1 USD)
-        const usdBalance = tokenBalance * 1;  // 1 USDT = 1 USD
-        document.getElementById('balanceUSD').innerText = `Balance in USD: $${usdBalance}`;
-
-    } catch (error) {
-        console.error("Error fetching balance or token data:", error);
-        alert("Ошибка при получении данных о токенах.");
+        // Получение цены токена и расчет баланса в долларах (например, через CoinGecko API)
+        const tokenPriceInUSD = await getTokenPrice(); // запрос цены
+        const balanceInUSD = balanceInToken * tokenPriceInUSD;
+        document.getElementById('balanceUSD').textContent = `Balance in USD: $${balanceInUSD.toFixed(2)}`;
+    } else {
+        alert("MetaMask не установлен");
     }
 }
+
+// Функция для получения цены токена (например, через CoinGecko API)
+async function getTokenPrice() {
+    const response = aw
