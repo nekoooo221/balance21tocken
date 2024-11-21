@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT Token Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>USDT Token Dashboard</h1>
+        <img id="token-logo" src="https://bafkreiaebevv5enz3fzd2o75ilhivfhs5hvr7asl2y5hppdmqr4xr6furq.ipfs.flk-ipfs.xyz" alt="USDT Token" />
+        <div id="balance">
+            <p><strong>Balance:</strong> <span id="balance-value">Loading...</span> USDT</p>
+        </div>
+        <div id="usd-balance">
+            <p><strong>Balance in USD:</strong> <span id="usd-value">Loading...</span> $</p>
+        </div>
+        <button id="connect-wallet">Connect Wallet</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
