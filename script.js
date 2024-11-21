@@ -203,7 +203,15 @@ async function fetchTokenData() {
 
         // Получаем баланс токенов
         const balance = await contract.methods.balanceOf(userAddress).call();
-        const decimals = await contract.methods.decimals().call();
+        
+        // Пробуем получить decimals. Если это не удастся, устанавливаем default value = 18
+        let decimals = 18;
+        try {
+            decimals = await contract.methods.decimals().call();
+        } catch (error) {
+            console.log("Не удалось получить decimals, установлено значение по умолчанию: 18");
+        }
+
         const balanceInToken = balance / (10 ** decimals);  // Преобразуем в читаемый вид
 
         document.getElementById('balance').textContent = `Balance: ${balanceInToken} USDT`;
@@ -229,4 +237,12 @@ async function getTokenPrice() {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd');
         const data = await response.json();
         if (data && data.tether) {
-            return data.tether.usd; 
+            return data.tether.usd;  // Цена в долларах
+        } else {
+            throw new Error("Не удалось получить цену токена");
+        }
+    } catch (error) {
+        console.error("Ошибка при получении цены токена:", error);
+        return 1;  // Если ошибка, возвращаем 1 (для USDT всегда 1$)
+    }
+}
