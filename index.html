@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Token Balance</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Подключение Web3.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT Token Balance</title>
+    <link rel="stylesheet" href="style.css"> <!-- Подключаем CSS -->
 </head>
 <body>
-  <div class="container">
     <h1>USDT Token Balance</h1>
+
+    <!-- Кнопка подключения MetaMask -->
     <button id="connectButton">Connect Wallet</button>
-    <p id="walletAddress">Wallet Address: Not connected</p>
-    <p id="tokenBalance">Balance: Loading...</p>
-    <p id="usdBalance">Balance in USD: Loading...</p>
-  </div>
-  
-  <!-- Подключение скрипта внизу страницы -->
-  <script src="script.js"></script>
+
+    <!-- Адрес кошелька -->
+    <div id="walletAddress">Wallet Address: Not connected</div>
+
+    <!-- Баланс токенов -->
+    <div id="tokenBalance">Balance: Loading...</div>
+
+    <!-- Баланс в долларах -->
+    <div id="usdBalance">Balance in USD: Loading...</div>
+
+    <!-- Подключаем Web3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js"></script>
+    <script src="script.js"></script> <!-- Подключаем наш JS файл -->
 </body>
 </html>
