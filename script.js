@@ -1,7 +1,7 @@
 // Адрес контракта USDT (замените на свой контракт, если нужно)
 const tokenAddress = '0x78D6d40b67537e98E3F4C3769602A26aA1D3d52D'; // Ваш контракт
 
-// ABI контракта (для ERC-20 токенов, например, USDT)
+// ABI контракта для токена ERC-20 (например, USDT)
 const tokenABI = [
   {
     "constant": true,
@@ -22,7 +22,7 @@ const tokenABI = [
     "stateMutability": "view",
     "type": "function"
   },
-  // Добавьте другие методы, если нужно
+  // Можно добавить другие методы контракта, если нужно
 ];
 
 document.addEventListener('DOMContentLoaded', function () {
