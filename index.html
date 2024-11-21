@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Token Dashboard</title>
-    <!-- Подключение Web3.js -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+    <title>Token Balance</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.1/dist/web3.min.js"></script>
 </head>
 <body>
-    <h1>My Token Dashboard</h1>
-    <p>Balance in Tokens: <span id="tokenBalance">Loading...</span></p>
-    <p>Balance in USD: <span id="usdBalance">Loading...</span></p>
 
-    <!-- Подключаем ваш JavaScript файл -->
-    <script src="app.js"></script>
+    <h1>Token Balance</h1>
+
+    <!-- Место для отображения баланса -->
+    <div id="tokenBalance">Balance: Loading...</div>
+    <div id="usdBalance">Balance in USD: Loading...</div>
+
+    <script>
+        // Проверка подключения MetaMask
+        if (window.ethereum) {
+            const web3 = new Web3(window.ethereum);
+            try {
+                window.ethereum.request({ method: 'eth_requestAccounts' }).then(() => {
+                    console.log("MetaMask is connected");
+                    getBalance(); // Запуск получения баланса
+                });
+            } catch (error) {
+                console.error("User denied account access");
+            }
+        } else {
+            alert("Please install MetaMask");
+        }
+
+        // Пример ABI и адреса контракта
+        const contractAddress = '0x173799E94Bf1d95Da829B7F7099cC13C583f3E27'; // Адрес вашего контракта
+        const abiArray = [ /* Ваш ABI здесь */ ]; // Подставьте правильный ABI вашего контракта
+
+        // Создание контракта
+        const contract = new web3.eth.Contract(abiArray, contractAddress);
+
+        // Получение баланса токенов
+        async function getBalance() {
+            const accounts = await web3.eth.getAccounts();
+            const balance = await contract.methods.balanceOf(accounts[0]).call(); // Получение баланса для текущего аккаунта
+            document.getElementById('tokenBalance').innerText = `Balance: ${balance}`; // Отображение баланса
+
+            // Получение цены токена с CoinGecko
+            const tokenPrice = await getTokenPrice();
+            const balanceInUSD = balance * tokenPrice; // Рассчитываем баланс в долларах
+            document.getElementById('usdBalance').innerText = `Balance in USD: $${balanceInUSD}`; // Отображаем баланс в долларах
+        }
+
+        // Запрос на CoinGecko для получения цены токена
+        async function getTokenPrice() {
+            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd');
+            const data = await response.json();
+            return data.tether.usd; // Возвращаем цену токена USDT в USD
+        }
+    </script>
+
 </body>
 </html>
