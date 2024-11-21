@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Token Dashboard</title>
+  <title>Token Balance</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Подключение Web3.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Token Dashboard</h1>
-    <div id="token-info">
-      <img id="token-image" src="https://bafkreiaebevv5enz3fzd2o75ilhivfhs5hvr7asl2y5hppdmqr4xr6furq.ipfs.flk-ipfs.xyz" alt="Token Image">
-      <div id="balance">
-        <p>Balance: <span id="balance-usdt">Loading...</span> USDT</p>
-        <p>Balance in USD: <span id="balance-usd">Loading...</span> $</p>
-      </div>
-    </div>
-    <button id="connect-wallet">Connect Wallet</button>
+    <h1>USDT Token Balance</h1>
+    <button id="connectButton">Connect Wallet</button>
+    <p id="walletAddress">Wallet Address: Not connected</p>
+    <p id="tokenBalance">Balance: Loading...</p>
+    <p id="usdBalance">Balance in USD: Loading...</p>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.0.0-beta.34/dist/web3.min.js"></script>
+  
+  <!-- Подключение скрипта -->
   <script src="script.js"></script>
 </body>
 </html>
