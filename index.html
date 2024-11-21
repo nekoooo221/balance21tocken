@@ -4,25 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USDT Token Balance</title>
-    <link rel="stylesheet" href="style.css"> <!-- Подключаем CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
 </head>
 <body>
-    <h1>USDT Token Balance</h1>
+    <div>
+        <h1>USDT Token Balance</h1>
+        <button id="connectButton">Connect Wallet</button>
+        <p id="walletAddress">Wallet Address: </p>
+        <p id="balance">Balance: Loading...</p>
+        <p id="balanceUSD">Balance in USD: Loading...</p>
+        <img id="tokenImage" src="" alt="Token Image" style="width: 100px;">
+    </div>
 
-    <!-- Кнопка подключения MetaMask -->
-    <button id="connectButton">Connect Wallet</button>
-
-    <!-- Адрес кошелька -->
-    <div id="walletAddress">Wallet Address: Not connected</div>
-
-    <!-- Баланс токенов -->
-    <div id="tokenBalance">Balance: Loading...</div>
-
-    <!-- Баланс в долларах -->
-    <div id="usdBalance">Balance in USD: Loading...</div>
-
-    <!-- Подключаем Web3.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.2/web3.min.js"></script>
-    <script src="script.js"></script> <!-- Подключаем наш JS файл -->
+    <script src="script.js"></script>
 </body>
 </html>
