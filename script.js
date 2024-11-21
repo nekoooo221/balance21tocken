@@ -1,77 +1,120 @@
-// Адрес контракта USDT (замените на свой контракт, если нужно)
-const tokenAddress = '0x78D6d40b67537e98E3F4C3769602A26aA1D3d52D'; // Ваш контракт
-
-// ABI контракта для токена ERC-20 (например, USDT)
+// ABI for the contract
 const tokenABI = [
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address"
-      }
-    ],
-    "name": "balanceOf",
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  // Можно добавить другие методы контракта, если нужно
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Transfer",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "image",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    // Add other functions as needed...
 ];
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Проверка наличия Web3
-    if (typeof Web3 !== "undefined") {
-        console.log("Web3 is available");
-        var web3 = new Web3(window.ethereum); // Используем Ethereum провайдер от Metamask
-    } else {
-        console.log("Web3 is not available. Please install Metamask.");
-    }
+// The address of your token contract
+const tokenAddress = "0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b";
 
-    // Элементы интерфейса
-    const connectButton = document.getElementById("connectButton");
-    const walletAddressElement = document.getElementById("walletAddress");
-    const tokenBalanceElement = document.getElementById("tokenBalance");
-    const usdBalanceElement = document.getElementById("usdBalance");
+// Initialize Web3
+let web3;
 
-    let userAddress = "";
+window.onload = () => {
+    if (typeof window.ethereum !== 'undefined') {
+        web3 = new Web3(window.ethereum);
+        console.log('MetaMask найден');
 
-    // Функция для подключения кошелька
-    connectButton.addEventListener('click', async () => {
-        try {
+        // Try to connect to MetaMask
+        document.getElementById("connectButton").addEventListener("click", async () => {
             await window.ethereum.request({ method: 'eth_requestAccounts' });
-            userAddress = (await web3.eth.getAccounts())[0];
-            walletAddressElement.textContent = `Wallet Address: ${userAddress}`;
-            fetchTokenData(); // Загружаем данные о токенах
-        } catch (error) {
-            console.error("User denied account access", error);
-        }
-    });
-
-    // Функция для получения баланса токенов
-    async function fetchTokenData() {
-        const contract = new web3.eth.Contract(tokenABI, tokenAddress);
-        
-        // Получаем баланс токенов
-        const balance = await contract.methods.balanceOf(userAddress).call();
-        const formattedBalance = web3.utils.fromWei(balance, 'ether'); // Преобразуем в удобочитаемый формат
-        tokenBalanceElement.textContent = `Balance: ${formattedBalance} USDT`;
-
-        // Получаем стоимость токенов в долларах (например, через CoinGecko API)
-        const priceInUSD = await getTokenPriceInUSD();
-        usdBalanceElement.textContent = `Balance in USD: $${(formattedBalance * priceInUSD).toFixed(2)}`;
+            displayBalance();
+        });
+    } else {
+        alert('MetaMask не установлен');
     }
+};
 
-    // Функция для получения цены токена (можно использовать API CoinGecko или другой источник)
-    async function getTokenPriceInUSD() {
-        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd");
-        const data = await response.json();
-        return data.tether.usd; // Возвращаем цену токена
+// Function to display balance and token details
+async function displayBalance() {
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0];
+
+    // Display wallet address
+    document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
+
+    // Get token contract instance
+    const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
+
+    try {
+        // Get balance of the wallet in tokens
+        const balance = await tokenContract.methods.balanceOf(account).call();
+        const decimals = await tokenContract.methods.decimals().call();
+        const tokenBalance = balance / (10 ** decimals);  // Convert to human-readable format
+
+        document.getElementById('balance').innerText = `Balance: ${tokenBalance} USDT`;
+
+        // Display token image
+        const tokenImage = await tokenContract.methods.image().call();
+        document.getElementById('tokenImage').src = tokenImage;
+
+        // Simulate USD balance (since USDT is pegged to 1 USD)
+        const usdBalance = tokenBalance * 1;  // 1 USDT = 1 USD
+        document.getElementById('balanceUSD').innerText = `Balance in USD: $${usdBalance}`;
+
+    } catch (error) {
+        console.error("Error fetching balance or token data:", error);
+        alert("Ошибка при получении данных о токенах.");
     }
-});
+}
