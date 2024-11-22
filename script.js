@@ -1,19 +1,12 @@
-// ABI контракта
 const tokenABI = [
     {
         "constant": true,
         "inputs": [
-            {
-                "name": "account",
-                "type": "address"
-            }
+            { "name": "account", "type": "address" }
         ],
         "name": "balanceOf",
         "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
+            { "name": "", "type": "uint256" }
         ],
         "payable": false,
         "stateMutability": "view",
@@ -24,10 +17,7 @@ const tokenABI = [
         "inputs": [],
         "name": "decimals",
         "outputs": [
-            {
-                "name": "",
-                "type": "uint8"
-            }
+            { "name": "", "type": "uint8" }
         ],
         "payable": false,
         "stateMutability": "view",
@@ -38,10 +28,7 @@ const tokenABI = [
         "inputs": [],
         "name": "symbol",
         "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
+            { "name": "", "type": "string" }
         ],
         "payable": false,
         "stateMutability": "view",
@@ -51,7 +38,6 @@ const tokenABI = [
 
 const contractAddress = '0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b'; // Адрес контракта
 
-// Функция подключения кошелька
 async function connectWallet() {
     if (window.ethereum) {
         try {
@@ -81,11 +67,12 @@ async function connectWallet() {
             alert("Ошибка при подключении кошелька или получении баланса");
         }
     } else {
-        alert("Убедитесь, что MetaMask или Trust Wallet установлен");
+        // Для мобильных кошельков: пытаемся открыть приложение кошелька
+        window.location.href = "https://trust://";  // Можно заменить на "metamask://", если используется MetaMask.
+        alert("Пожалуйста, откройте ваше приложение кошелька и подтвердите подключение.");
     }
 }
 
-// Функция для получения курса токена с CoinGecko
 async function getTokenPrice() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd');
@@ -97,5 +84,4 @@ async function getTokenPrice() {
     }
 }
 
-// Запуск функции подключения
 document.getElementById('connectButton').addEventListener('click', connectWallet);
