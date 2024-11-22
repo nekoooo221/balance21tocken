@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USDT Token Balance</title>
+    <title>USDT Token Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>USDT Token Balance</h1>
-            <p>Check your USDT balance</p>
+
+    <div id="app">
+        <h1>USDT Token Dashboard</h1>
+
+        <button id="connectButton">Подключить кошелек</button>
+
+        <div id="walletInfo" style="display: none;">
+            <h3>Адрес кошелька: <span id="walletAddress"></span></h3>
+            <p id="balance">Баланс: Loading...</p>
+            <p id="usdBalance">Баланс в USD: Loading...</p>
         </div>
-        <button id="connectButton" class="btn">Connect Wallet</button>
-        <div id="walletInfo" class="info">
-            <p>Wallet Address: <span id="walletAddress">Not Connected</span></p>
-            <p>Balance: <span id="balance">Loading...</span> USDT</p>
-            <p>Balance in USD: <span id="balanceUSD">Loading...</span> $</p>
-        </div>
-        <img id="tokenImage" src="" alt="USDT" class="token-image">
+        
+        <div id="error" style="color: red; display: none;"></div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
