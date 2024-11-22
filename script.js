@@ -1,3 +1,4 @@
+// ABI контракта
 const tokenABI = [
     {
         "constant": true,
@@ -48,9 +49,9 @@ const tokenABI = [
     }
 ];
 
-const contractAddress = '0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b'; // Адрес вашего контракта
+const contractAddress = '0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b'; // Адрес контракта
 
-// Функция для подключения к кошельку
+// Функция подключения кошелька
 async function connectWallet() {
     if (window.ethereum) {
         try {
@@ -67,13 +68,13 @@ async function connectWallet() {
             // Получаем баланс токенов
             const balance = await tokenContract.methods.balanceOf(userAddress).call();
             const decimals = await tokenContract.methods.decimals().call();
-            const formattedBalance = balance / (10 ** decimals);
+            const formattedBalance = web3.utils.toBN(balance).div(web3.utils.toBN(10).pow(web3.utils.toBN(decimals))); // Преобразуем BigInt
 
-            document.getElementById('balance').textContent = `Balance: ${formattedBalance} USDT`;
+            document.getElementById('balance').textContent = `Balance: ${web3.utils.fromWei(formattedBalance.toString())} USDT`;
 
             // Получаем курс токена
             const usdBalance = await getTokenPrice();
-            document.getElementById('usdBalance').textContent = `Balance in USD: $${(formattedBalance * usdBalance).toFixed(2)}`;
+            document.getElementById('usdBalance').textContent = `Balance in USD: $${(web3.utils.fromWei(formattedBalance.toString()) * usdBalance).toFixed(2)}`;
 
         } catch (error) {
             console.error("Ошибка при получении баланса токенов:", error);
