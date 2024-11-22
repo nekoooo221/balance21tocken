@@ -1,4 +1,4 @@
-/* Общее оформление */
+/* Base styles for the page */
 * {
     margin: 0;
     padding: 0;
@@ -6,76 +6,62 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(to bottom right, #1e3c72, #2a5298);
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: white;
+    margin: 0;
 }
 
-#container {
-    text-align: center;
-    padding: 30px;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 20px;
-    width: 100%;
+.container {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 90%;
     max-width: 400px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
 }
 
-h1 {
-    font-size: 30px;
-    margin-bottom: 20px;
-    color: #ffcc00;
+.header h1 {
+    font-size: 2rem;
+    color: #4CAF50;
 }
 
-.token-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-bottom: 20px;
-    transition: transform 0.3s ease;
+.header p {
+    color: #888;
 }
 
-.token-img:hover {
-    transform: scale(1.1);
-}
-
-button {
+.btn {
     background-color: #4CAF50;
     color: white;
-    padding: 15px 30px;
-    border: none;
+    padding: 10px 20px;
     border-radius: 10px;
-    font-size: 16px;
+    border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
-button:hover {
+.btn:hover {
     background-color: #45a049;
-    transform: scale(1.05);
 }
 
-button:active {
-    background-color: #3e8e41;
+.info p {
+    margin: 10px 0;
+    font-size: 1rem;
 }
 
-/* Для мобильных устройств */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 25px;
-    }
+.token-image {
+    width: 80px;
+    height: 80px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
 
-    button {
-        padding: 12px 25px;
-        font-size: 14px;
-    }
-
-    .token-img {
-        width: 60px;
-        height: 60px;
-    }
+#walletAddress, #balance, #balanceUSD {
+    font-weight: bold;
 }
