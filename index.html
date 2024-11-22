@@ -1,26 +1,25 @@
-async function fetchTokenBalance() {
-    const tokenAddress = "0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b"; // Адрес твоего контракта
-    const tokenABI = [
-        // ABI для твоего контракта, добавь сюда свой ABI
-    ];
-
-    try {
-        const accounts = await web3.eth.getAccounts();
-        const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Balance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <div class="header">
+            <h1>USDT Token Balance</h1>
+            <img src="https://bafkreiaebevv5enz3fzd2o75ilhivfhs5hvr7asl2y5hppdmqr4xr6furq.ipfs.flk-ipfs.xyz" alt="USDT" class="token-img">
+        </div>
         
-        // Получаем баланс
-        const balance = await tokenContract.methods.balanceOf(accounts[0]).call();
-        
-        // Получаем количество десятичных знаков
-        const decimals = await tokenContract.methods.decimals().call();
+        <button id="connectButton">Connect Wallet</button>
+        <p id="walletAddress"></p>
+        <p>Balance: <span id="balance">Loading...</span> USDT</p>
+        <p>Balance in USD: <span id="usdBalance">Loading...</span> $</p>
+    </div>
 
-        // Преобразуем баланс в нужный формат с учетом десятичных знаков
-        const balanceInTokenUnits = balance / Math.pow(10, decimals); // Разделим на 10^decimals
-
-        // Отображаем результат на странице
-        document.getElementById('balance').textContent = `${balanceInTokenUnits} USDT`;
-    } catch (error) {
-        console.error("Ошибка при получении баланса токенов:", error);
-        document.getElementById('balance').textContent = "Ошибка при получении баланса";
-    }
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
