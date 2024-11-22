@@ -1,88 +1,66 @@
-// Убедитесь, что Web3 доступен
-let web3;
+// Убедимся, что Web3 доступен
+if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
+    console.log("Web3 доступен");
+} else {
+    alert("Web3 не найден. Пожалуйста, установите MetaMask или Trust Wallet.");
+}
 
-window.onload = () => {
-    if (typeof window.ethereum !== "undefined") {
-        web3 = new Web3(window.ethereum);
+// Контракт и ABI (поставь свой ABI сюда)
+const contractAddress = '0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b'; // Адрес контракта
+const tokenABI = [
+    // Вставь свой ABI сюда
+];
 
-        // Проверка на наличие MetaMask и Trust Wallet
-        if (window.ethereum.isMetaMask) {
-            console.log("MetaMask найден");
-        } else if (window.ethereum.isTrust) {
-            console.log("Trust Wallet найден");
-        } else {
-            console.log("Кошелек не найден");
+// Функция для подключения кошелька
+document.getElementById('connectWallet').addEventListener('click', connectWallet);
+
+async function connectWallet() {
+    if (window.ethereum) {
+        try {
+            // Запросим подключение MetaMask или Trust Wallet
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const web3 = new Web3(window.ethereum);
+            const accounts = await web3.eth.getAccounts();
+            const userAddress = accounts[0];
+            document.getElementById('walletAddress').textContent = `Wallet Address: ${userAddress}`;
+
+            // Инициализация контракта
+            const tokenContract = new web3.eth.Contract(tokenABI, contractAddress);
+            await fetchTokenBalance(tokenContract, userAddress);
+
+        } catch (error) {
+            console.error(error);
+            alert("Ошибка подключения кошелька");
         }
     } else {
-        alert("Пожалуйста, установите MetaMask или Trust Wallet");
+        alert("Убедитесь, что у вас установлен MetaMask или Trust Wallet");
     }
-
-    // Подключение к кошельку
-    document.getElementById("connectButton").addEventListener("click", async () => {
-        try {
-            // Запрашиваем доступ к аккаунту
-            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-            const userAddress = accounts[0];
-            document.getElementById("walletAddress").textContent = userAddress;
-
-            // Показать балансы
-            fetchBalance(userAddress);
-        } catch (error) {
-            console.error("Ошибка подключения:", error);
-        }
-    });
-};
+}
 
 // Функция для получения баланса токенов
-async function fetchBalance(address) {
-    const tokenAddress = "0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b"; // Ваш контракт
-    const tokenABI = [
-        {
-            "constant": true,
-            "inputs": [{ "name": "account", "type": "address" }],
-            "name": "balanceOf",
-            "outputs": [{ "name": "", "type": "uint256" }],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "decimals",
-            "outputs": [{ "name": "", "type": "uint8" }],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        }
-    ];
-
-    const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
-
+async function fetchTokenBalance(tokenContract, userAddress) {
     try {
-        // Получение баланса
-        const balance = await tokenContract.methods.balanceOf(address).call();
+        const balance = await tokenContract.methods.balanceOf(userAddress).call();
         const decimals = await tokenContract.methods.decimals().call();
+        const formattedBalance = balance / (10 ** decimals); // Преобразуем в читаемую форму
+        document.getElementById('balance').textContent = `Balance: ${formattedBalance} USDT`;
 
-        // Баланс с учетом десятичных знаков
-        const balanceWithDecimals = balance / Math.pow(10, decimals);
-
-        // Отображаем баланс
-        document.getElementById("balance").textContent = balanceWithDecimals;
-
-        // Показать баланс в USD (предположим, что 1 токен = 1 USD)
-        document.getElementById("balanceUSD").textContent = `$${balanceWithDecimals}`;
+        // Преобразуем в доллары
+        const usdBalance = formattedBalance * 1; // Цена токена = 1 доллар
+        document.getElementById('usdBalance').textContent = `Balance in USD: $${usdBalance.toFixed(2)}`;
     } catch (error) {
-        console.error("Ошибка получения данных о токенах:", error);
+        console.error(error);
+        alert("Ошибка при получении баланса токенов");
     }
 }
 
-// Генерация QR-кода для подключения Trust Wallet (мобильное приложение)
-function generateQRCode() {
-    const qrCodeData = 'ethereum:' + "0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b"; // Адрес контракта
-    new QRCode(document.getElementById("qrcodeContainer"), qrCodeData);
-}
-
-if (window.ethereum.isTrust) {
-    generateQRCode();
+// Функция для открытия кошелька через Trust Wallet или MetaMask на мобильных устройствах
+function openMobileWallet() {
+    if (window.ethereum && window.ethereum.isMetaMask) {
+        window.location.href = "metamask://";
+    } else if (window.ethereum && window.ethereum.isTrust) {
+        window.location.href = "trust://";
+    } else {
+        alert("Кошелек не поддерживается");
+    }
 }
