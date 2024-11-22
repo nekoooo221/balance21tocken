@@ -1,21 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USDT Token Balance</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>USDT Token Balance</h1>
-        <button id="connectButton">Connect Wallet</button>
-        <p id="walletAddress">Wallet Address: Not Connected</p>
-        <p id="balance">Balance: Loading...</p>
-        <p id="usdBalance">Balance in USD: Loading...</p>
-    </div>
+async function fetchTokenBalance() {
+    const tokenAddress = "0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b"; // Адрес твоего контракта
+    const tokenABI = [
+        // ABI для твоего контракта, добавь сюда свой ABI
+    ];
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+    try {
+        const accounts = await web3.eth.getAccounts();
+        const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
+        
+        // Получаем баланс
+        const balance = await tokenContract.methods.balanceOf(accounts[0]).call();
+        
+        // Получаем количество десятичных знаков
+        const decimals = await tokenContract.methods.decimals().call();
+
+        // Преобразуем баланс в нужный формат с учетом десятичных знаков
+        const balanceInTokenUnits = balance / Math.pow(10, decimals); // Разделим на 10^decimals
+
+        // Отображаем результат на странице
+        document.getElementById('balance').textContent = `${balanceInTokenUnits} USDT`;
+    } catch (error) {
+        console.error("Ошибка при получении баланса токенов:", error);
+        document.getElementById('balance').textContent = "Ошибка при получении баланса";
+    }
+}
