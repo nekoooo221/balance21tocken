@@ -1,41 +1,56 @@
 const tokenABI = [
     {
+        "constant": true,
         "inputs": [
             {
-                "internalType": "address",
-                "name": "",
+                "name": "account",
                 "type": "address"
             }
         ],
         "name": "balanceOf",
         "outputs": [
             {
-                "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
         ],
+        "payable": false,
         "stateMutability": "view",
         "type": "function"
     },
     {
+        "constant": true,
         "inputs": [],
         "name": "decimals",
         "outputs": [
             {
-                "internalType": "uint8",
                 "name": "",
                 "type": "uint8"
             }
         ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
         "stateMutability": "view",
         "type": "function"
     }
 ];
 
-const contractAddress = '0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b'; // Твой адрес контракта
+const contractAddress = '0x3d6C000465a753BBf301b8E8F9f0c2a56BEC5e9b'; // Адрес вашего контракта
 
-// Функция подключения к кошельку
+// Функция для подключения к кошельку
 async function connectWallet() {
     if (window.ethereum) {
         try {
@@ -69,11 +84,16 @@ async function connectWallet() {
     }
 }
 
-// Функция получения курса токена с CoinGecko
+// Функция для получения курса токена с CoinGecko
 async function getTokenPrice() {
-    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd');
-    const data = await response.json();
-    return data.tether.usd; // возвращает цену USDT в USD
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd');
+        const data = await response.json();
+        return data.tether.usd; // возвращает цену USDT в USD
+    } catch (error) {
+        console.error("Ошибка при получении цены токена:", error);
+        return 1; // возвращаем 1, если не удалось получить цену
+    }
 }
 
 // Запуск функции подключения
