@@ -1,28 +1,21 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USDT Token Balance</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 <body>
-    <div class="main-container">
-        <div class="card">
-            <h1>USDT Token Balance</h1>
-            <div class="token-info">
-                <img id="tokenImage" src="https://bafkreiaebevv5enz3fzd2o75ilhivfhs5hvr7asl2y5hppdmqr4xr6furq.ipfs.flk-ipfs.xyz" alt="USDT Token">
-                <h2 id="tokenName">Tether (USDT)</h2>
-            </div>
-            <button id="connectButton" class="btn">Connect Wallet</button>
-
-            <p id="walletAddress">Wallet Address: Not connected</p>
-            <p id="balance">Balance: Loading...</p>
-            <p id="usdBalance">Balance in USD: Loading...</p>
-        </div>
+    <div class="container">
+        <h1>USDT Token Balance</h1>
+        <button id="connectButton">Connect Wallet</button>
+        <p id="walletAddress">Wallet Address: Not Connected</p>
+        <p id="balance">Balance: Loading...</p>
+        <p id="usdBalance">Balance in USD: Loading...</p>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
