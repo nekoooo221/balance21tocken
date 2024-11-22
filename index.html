@@ -8,13 +8,19 @@
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>USDT Token Balance</h1>
-        <button id="connectButton">Connect Wallet</button>
+    <div class="main-container">
+        <div class="card">
+            <h1>USDT Token Balance</h1>
+            <div class="token-info">
+                <img id="tokenImage" src="https://bafkreiaebevv5enz3fzd2o75ilhivfhs5hvr7asl2y5hppdmqr4xr6furq.ipfs.flk-ipfs.xyz" alt="USDT Token">
+                <h2 id="tokenName">Tether (USDT)</h2>
+            </div>
+            <button id="connectButton" class="btn">Connect Wallet</button>
 
-        <p id="walletAddress">Wallet Address: Not connected</p>
-        <p id="balance">Balance: Loading...</p>
-        <p id="usdBalance">Balance in USD: Loading...</p>
+            <p id="walletAddress">Wallet Address: Not connected</p>
+            <p id="balance">Balance: Loading...</p>
+            <p id="usdBalance">Balance in USD: Loading...</p>
+        </div>
     </div>
 
     <script src="script.js"></script>
