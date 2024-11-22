@@ -5,22 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USDT Token Balance</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script> <!-- Web3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
 </head>
 <body>
-
-    <h1>USDT Token Balance</h1>
-
-    <!-- Кнопка для подключения кошелька -->
-    <button id="connectButton">Connect Wallet</button>
-
-    <!-- Отображение адреса и баланса -->
-    <p>Wallet Address: <span id="walletAddress">Not Connected</span></p>
-    <p>Balance: <span id="balance">Loading...</span></p>
-    <p>Balance in USD: <span id="balanceUSD">Loading...</span></p>
-
-    <!-- Контейнер для QR-кода (для мобильного подключения Trust Wallet) -->
-    <div id="qrcodeContainer"></div>
+    <div class="container">
+        <h1>USDT Token Balance</h1>
+        <button id="connectWallet">Connect Wallet</button>
+        <div id="walletAddress">Wallet Address: Not connected</div>
+        <div id="balance">Balance: Loading...</div>
+        <div id="usdBalance">Balance in USD: Loading...</div>
+    </div>
 
     <script src="script.js"></script>
 </body>
