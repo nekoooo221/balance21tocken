@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Token Balance</title>
+    <title>USDT Token Balance</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="container">
+    <div class="container">
         <div class="header">
             <h1>USDT Token Balance</h1>
-            <img src="https://bafkreiaebevv5enz3fzd2o75ilhivfhs5hvr7asl2y5hppdmqr4xr6furq.ipfs.flk-ipfs.xyz" alt="USDT" class="token-img">
+            <p>Check your USDT balance</p>
         </div>
-        
-        <button id="connectButton">Connect Wallet</button>
-        <p id="walletAddress"></p>
-        <p>Balance: <span id="balance">Loading...</span> USDT</p>
-        <p>Balance in USD: <span id="usdBalance">Loading...</span> $</p>
+        <button id="connectButton" class="btn">Connect Wallet</button>
+        <div id="walletInfo" class="info">
+            <p>Wallet Address: <span id="walletAddress">Not Connected</span></p>
+            <p>Balance: <span id="balance">Loading...</span> USDT</p>
+            <p>Balance in USD: <span id="balanceUSD">Loading...</span> $</p>
+        </div>
+        <img id="tokenImage" src="" alt="USDT" class="token-image">
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.4/dist/web3.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
